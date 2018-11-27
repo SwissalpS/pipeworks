@@ -41,12 +41,18 @@ minetest.register_globalstep(function(dtime)
 	if not luaentity.entities then
 		return
 	end
+	local t0 = minetest.get_us_time()
 	tube_item_count = {}
 	for id, entity in pairs(luaentity.entities) do
 		if entity.name == "pipeworks:tubed_item" then
 			local h = minetest.hash_node_position(vector.round(entity._pos))
 			tube_item_count[h] = (tube_item_count[h] or 0) + 1
 		end
+	end
+	local t1 = minetest.get_us_time()
+	local diff = t1 - t0
+	if diff > 100000 then
+		minetest.log("warning", "[pipeworks] item_transport took " .. diff .. " us")
 	end
 end)
 
