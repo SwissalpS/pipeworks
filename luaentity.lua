@@ -365,16 +365,23 @@ end
 local handle_active_blocks_timer = 0.1
 
 minetest.register_globalstep(function(dtime)
-	local t0 = minetest.get_us_time()
 	handle_active_blocks_timer = handle_active_blocks_timer + dtime
 	if dtime < 0.2 or handle_active_blocks_timer >= (dtime * 3) then
 		handle_active_blocks_timer = 0.1
+
+		local t0 = minetest.get_us_time()
 		move_entities_globalstep_part1(dtime)
+		local t1 = minetest.get_us_time()
+		local diff = t1 - t0
+		if diff > 50000 then
+			minetest.log("warning", "[pipeworks] luaentities globalstep part 1 took " .. diff .. " us")
+		end
+
 		move_entities_globalstep_part2(dtime)
-	end
-	local t1 = minetest.get_us_time()
-	local diff = t1 - t0
-	if diff > 100000 then
-		minetest.log("warning", "[pipeworks] luaentites globalstep took " .. diff .. " us")
+		local t2 = minetest.get_us_time()
+		diff = t2 - t1
+		if diff > 50000 then
+			minetest.log("warning", "[pipeworks] luaentities globalstep part 2 took " .. diff .. " us")
+		end
 	end
 end)
