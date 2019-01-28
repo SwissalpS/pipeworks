@@ -321,6 +321,17 @@ function luaentity.get_objects_inside_radius(pos, radius)
 	end
 end
 
+minetest.register_chatcommand("pipeworks_flush", {
+	description = "flushes the pipeworks tubes",
+	privs = {server=true},
+	func = function(name)
+		minetest.log("warning", "Player " .. name .. " flushes the pipeworks tubes")
+		for id, entity in pairs(luaentity.entities) do
+			entity:remove()
+		end
+	end
+})
+
 local move_entities_globalstep_part2 = function(dtime)
 	if not luaentity.entities then
 		luaentity.entities = read_entities()
