@@ -36,7 +36,7 @@ local function read_entities()
 		y=math.min(30927,y)
 		z=math.min(30927,z)
 
-		entity.start_pos.x = x                 
+		entity.start_pos.x = x
 		entity.start_pos.y = y
 		entity.start_pos.z = z
 
@@ -206,7 +206,7 @@ local entitydef_default = {
 		end
 	end,
 	get_velocity = function(self)
-		return vector.new(self._velocity)	
+		return vector.new(self._velocity)
 	end,
 	set_velocity = function(self, velocity)
 		self._velocity = vector.new(velocity)
@@ -284,7 +284,7 @@ function luaentity.add_entity(pos, name)
 		_acceleration = {x = 0, y = 0, z = 0},
 		_attached_entities = {},
 	}
-	
+
 	local prototype = luaentity.registered_entities[name]
 	setmetatable(entity, prototype) -- Default to prototype for other methods
 	luaentity.entities[index] = entity
@@ -326,9 +326,25 @@ minetest.register_chatcommand("pipeworks_flush", {
 	privs = {server=true},
 	func = function(name)
 		minetest.log("warning", "Player " .. name .. " flushes the pipeworks tubes")
+		local count = 0
 		for id, entity in pairs(luaentity.entities) do
 			entity:remove()
+			count = count + 1
 		end
+		minetest.log("warning", "Flushed: " .. count .. " items")
+		return true, "Flushed: " .. count .. " items"
+	end
+})
+
+minetest.register_chatcommand("pipeworks_stats", {
+	description = "Returns some pipeworks stats",
+	privs = {interact=true},
+	func = function(name)
+		local count = 0
+		for id, entity in pairs(luaentity.entities) do
+			count = count + 1
+		end
+		return true, "Items in tubes: " .. count
 	end
 })
 
