@@ -19,6 +19,15 @@ local function save_tube_db()
 	end
 end
 
+-- expose for external batch use (jumpdrive)
+pipeworks.tptube = {
+	hash = hash,
+	save_tube_db = save_tube_db,
+	tp_tube_db = tp_tube_db,
+	tp_tube_db_version = tp_tube_db_version
+}
+
+
 local function migrate_tube_db()
 		local tmp_db = {}
 		tp_tube_db.version = nil
