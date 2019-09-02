@@ -10,6 +10,7 @@ end
 local function save_tube_db()
 	local file, err = io.open(filename, "w")
 	if file then
+		if tp_tube_db == nil then return end
 		tp_tube_db.version = tp_tube_db_version
 		file:write(minetest.serialize(tp_tube_db))
 		tp_tube_db.version = nil
